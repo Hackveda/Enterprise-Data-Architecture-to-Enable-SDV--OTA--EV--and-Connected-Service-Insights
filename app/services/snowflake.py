@@ -3,6 +3,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
+import re
 import snowflake.connector
 
 from app.config import get_settings
@@ -89,19 +90,33 @@ def team_kpis(team: str) -> dict[str, Any] | None:
         return None
 
 
+def _sql_statements(text: str) -> list[str]:
+    """Return executable statements while ignoring SQL comments/empty chunks."""
+    # Remove /* ... */ block comments.
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    # Remove full-line and trailing -- comments. Project SQL does not place --
+    # inside string literals, so this keeps deployment parsing intentionally simple.
+    cleaned_lines: list[str] = []
+    for line in text.splitlines():
+        line = line.split("--", 1)[0].strip()
+        if line:
+            cleaned_lines.append(line)
+    cleaned = "\n".join(cleaned_lines)
+    return [statement.strip() for statement in cleaned.split(";") if statement.strip()]
+
+
 def run_sql_file(
     path: Path,
     *,
     role_override: str | None = None,
     include_context: bool = True,
 ) -> list[str]:
-    """Execute a semicolon-delimited Snowflake SQL file using the configured role.
+    """Execute Snowflake SQL with the configured platform role.
 
-    Important: this deliberately does NOT default to ACCOUNTADMIN. The deployment
-    should run with the provisioned role from .env (PLATFORM_ROLE in this project).
+    This does not default to ACCOUNTADMIN. Comment-only/empty SQL chunks are
+    filtered before execution so bootstrap files can contain normal comments.
     """
-    text = path.read_text(encoding="utf-8")
-    statements = [s.strip() for s in text.split(";") if s.strip()]
+    statements = _sql_statements(path.read_text(encoding="utf-8"))
     executed: list[str] = []
     with connection(role_override=role_override, include_context=include_context) as conn:
         cur = conn.cursor()
