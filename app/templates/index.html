@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Automotive Intelligence Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body data-team="{{ team }}">
+  <aside class="sidebar">
+    <div class="brand"><div class="brandmark">A</div><div><strong>Automotive EDP</strong><span>Enterprise Intelligence</span></div></div>
+    <nav>{% for item in ['marketing','sales','support','finance','delivery'] %}<a class="navitem {% if team == item %}active{% endif %}" href="/{{ item }}"><span class="dot"></span>{{ item|title }}</a>{% endfor %}</nav>
+    <div class="sidefoot"><div class="status-row"><span id="sfDot" class="status-dot"></span><span id="sfText">Checking Snowflake…</span></div><small>Governed marts only</small></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><p class="eyebrow">{{ team|upper }} COMMAND CENTER</p><h1>{{ team|title }} intelligence</h1><p class="sub">Live operational signals + governed Snowflake marts + 2026 consumer-study context</p></div><div class="livepill"><span></span>LIVE <b id="rps">1.80M</b> events/s</div></header>
+    <section id="metricGrid" class="metric-grid"></section>
+    <section class="grid two"><article class="card"><div class="card-head"><div><h2 id="primaryTitle">Market signal</h2><p>Consumer study</p></div><span class="tag">Research</span></div><div id="chartPrimary" class="chart"></div></article><article class="card"><div class="card-head"><div><h2>Live platform health</h2><p>Streaming + serving</p></div><span class="tag live">SSE</span></div><div id="chartLive" class="chart"></div></article></section>
+    <section class="grid three"><article class="card"><div class="card-head"><div><h2>Market comparison</h2><p>Bar ranking</p></div></div><div id="chartBar" class="chart compact"></div></article><article class="card"><div class="card-head"><div><h2>Portfolio mix</h2><p>100% stacked bars</p></div></div><div id="chartStack" class="chart compact"></div></article><article class="card"><div class="card-head"><div><h2>Signal matrix</h2><p>Radar profile</p></div></div><div id="chartRadar" class="chart compact"></div></article></section>
+    <section class="grid three"><article class="card"><div class="card-head"><div><h2>Opportunity composition</h2><p>Donut</p></div></div><div id="chartDonut" class="chart compact"></div></article><article class="card"><div class="card-head"><div><h2>Conversion journey</h2><p>Funnel</p></div></div><div id="chartFunnel" class="chart compact"></div></article><article class="card"><div class="card-head"><div><h2>Market × signal</h2><p>Heatmap</p></div></div><div id="chartHeat" class="chart compact"></div></article></section>
+    <section class="grid two lower"><article class="card insight-card"><div class="card-head"><div><h2>Insights → actions</h2><p>Evidence-led recommendations</p></div></div><div id="insights"></div></article><article class="card"><div class="card-head"><div><h2>Governed data contract</h2><p>What this team is allowed to see</p></div><span class="tag secure">RBAC</span></div><div id="governed" class="governed"></div></article></section>
+  </main>
+  <script>window.CURRENT_TEAM="{{ team }}";</script><script src="/static/app.js"></script>
+</body></html>

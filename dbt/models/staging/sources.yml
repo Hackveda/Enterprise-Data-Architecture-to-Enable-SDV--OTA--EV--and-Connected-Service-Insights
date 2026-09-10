@@ -4,12 +4,11 @@ sources:
     database: ENTERPRISE_DATA
     schema: RAW
     tables:
-      - name: events
-        loaded_at_field: ingested_at
-        freshness:
-          warn_after: {count: 2, period: minute}
-          error_after: {count: 10, period: minute}
+      - name: vehicle_events
       - name: customers
-      - name: products
-      - name: campaigns
+      - name: vehicles
+      - name: sales_orders
+      - name: campaign_events
       - name: support_tickets
+      - name: financial_transactions
+      - name: ota_deployments
