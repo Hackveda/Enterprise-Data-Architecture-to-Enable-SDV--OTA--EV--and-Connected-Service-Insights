@@ -1,0 +1,16 @@
+name: enterprise_data_platform
+version: 1.0.0
+config-version: 2
+profile: enterprise_data_platform
+model-paths: ["models"]
+models:
+  enterprise_data_platform:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: curated
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table

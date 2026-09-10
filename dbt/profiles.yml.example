@@ -1,0 +1,13 @@
+enterprise_data_platform:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: UIEPPMA-ME31407
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: EDP_ENGINEER
+      database: ENTERPRISE_DATA
+      warehouse: EDP_TRANSFORM_WH
+      schema: STAGING
+      threads: 8

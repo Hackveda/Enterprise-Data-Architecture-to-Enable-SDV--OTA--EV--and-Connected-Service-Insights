@@ -1,0 +1,12 @@
+version: 2
+models:
+  - name: mart_sales_daily
+    columns:
+      - name: day
+        tests: [not_null]
+      - name: gross_revenue
+        tests: [not_null]
+  - name: mart_marketing_daily
+    columns:
+      - name: day
+        tests: [not_null]

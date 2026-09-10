@@ -1,0 +1,10 @@
+pandas>=2.2
+numpy>=2.0
+pyarrow>=17
+requests>=2.32
+python-dotenv>=1.0
+snowflake-connector-python[pandas]>=3.12
+streamlit>=1.39
+plotly>=5.24
+faker>=30
+pytest>=8.3

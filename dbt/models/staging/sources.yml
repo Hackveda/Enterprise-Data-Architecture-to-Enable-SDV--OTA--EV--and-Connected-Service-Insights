@@ -1,0 +1,15 @@
+version: 2
+sources:
+  - name: raw
+    database: ENTERPRISE_DATA
+    schema: RAW
+    tables:
+      - name: events
+        loaded_at_field: ingested_at
+        freshness:
+          warn_after: {count: 2, period: minute}
+          error_after: {count: 10, period: minute}
+      - name: customers
+      - name: products
+      - name: campaigns
+      - name: support_tickets
