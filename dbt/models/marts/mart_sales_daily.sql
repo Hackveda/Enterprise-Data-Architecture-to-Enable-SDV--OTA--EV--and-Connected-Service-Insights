@@ -1,5 +1,4 @@
-select date_trunc('day', event_ts) as day, region,
-       count_if(event_type='ORDER_CREATED') as orders,
-       sum(iff(event_type='ORDER_CREATED',amount,0)) as gross_revenue
-from {{ ref('stg_events') }}
-group by 1,2
+select to_date(order_ts) snapshot_date, market, channel, powertrain,
+       count(*) orders, count_if(status='WON') won_orders, avg(net_price) avg_selling_price,
+       sum(net_price) booked_revenue, avg(discount/list_price) discount_rate
+from {{ ref('stg_sales_orders') }} group by 1,2,3,4

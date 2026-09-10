@@ -1,12 +1,12 @@
 version: 2
 models:
-  - name: mart_sales_daily
-    columns:
-      - name: day
-        tests: [not_null]
-      - name: gross_revenue
-        tests: [not_null]
   - name: mart_marketing_daily
-    columns:
-      - name: day
-        tests: [not_null]
+    columns: [{name: snapshot_date, tests: [not_null]}]
+  - name: mart_sales_daily
+    columns: [{name: snapshot_date, tests: [not_null]}]
+  - name: mart_support_daily
+    columns: [{name: snapshot_date, tests: [not_null]}]
+  - name: mart_finance_daily
+    columns: [{name: snapshot_date, tests: [not_null]}]
+  - name: mart_delivery_daily
+    columns: [{name: snapshot_date, tests: [not_null]}]

@@ -1,16 +1,17 @@
-name: enterprise_data_platform
-version: 1.0.0
+name: automotive_edp
+version: '2.0.0'
 config-version: 2
-profile: enterprise_data_platform
+profile: automotive_edp
 model-paths: ["models"]
+clean-targets: ["target", "dbt_packages"]
 models:
-  enterprise_data_platform:
+  automotive_edp:
     staging:
-      +schema: staging
+      +schema: STAGING
       +materialized: view
-    intermediate:
-      +schema: curated
-      +materialized: view
+    curated:
+      +schema: CURATED
+      +materialized: table
     marts:
-      +schema: marts
+      +schema: MARTS
       +materialized: table
