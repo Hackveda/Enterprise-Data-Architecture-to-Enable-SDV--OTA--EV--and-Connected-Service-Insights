@@ -11,7 +11,11 @@ from app.config import get_settings
 @contextmanager
 def connection(*, role_override: str | None = None, include_context: bool = True):
     s = get_settings()
-    kwargs: dict[str, Any] = {"account": s.snowflake_account, "user": s.snowflake_user, "client_session_keep_alive": True}
+    kwargs: dict[str, Any] = {
+        "account": s.snowflake_account,
+        "user": s.snowflake_user,
+        "client_session_keep_alive": True,
+    }
     role = role_override or s.snowflake_role
     if role:
         kwargs["role"] = role
@@ -24,6 +28,7 @@ def connection(*, role_override: str | None = None, include_context: bool = True
         kwargs["private_key_file"] = str(Path(s.snowflake_private_key_path).expanduser())
     else:
         kwargs["password"] = s.snowflake_password
+
     conn = snowflake.connector.connect(**kwargs)
     try:
         yield conn
@@ -42,9 +47,18 @@ def health() -> dict[str, Any]:
     try:
         with connection() as conn:
             cur = conn.cursor()
-            cur.execute("select current_account(), current_user(), current_role(), current_warehouse(), current_database()")
+            cur.execute(
+                "select current_account(), current_user(), current_role(), current_warehouse(), current_database()"
+            )
             row = cur.fetchone()
-            return {"connected": True, "account": row[0], "user": row[1], "role": row[2], "warehouse": row[3], "database": row[4]}
+            return {
+                "connected": True,
+                "account": row[0],
+                "user": row[1],
+                "role": row[2],
+                "warehouse": row[3],
+                "database": row[4],
+            }
     except Exception as exc:
         return {"connected": False, "message": str(exc)[:300]}
 
@@ -75,7 +89,17 @@ def team_kpis(team: str) -> dict[str, Any] | None:
         return None
 
 
-def run_sql_file(path: Path, *, role_override: str = "ACCOUNTADMIN", include_context: bool = False) -> list[str]:
+def run_sql_file(
+    path: Path,
+    *,
+    role_override: str | None = None,
+    include_context: bool = True,
+) -> list[str]:
+    """Execute a semicolon-delimited Snowflake SQL file using the configured role.
+
+    Important: this deliberately does NOT default to ACCOUNTADMIN. The deployment
+    should run with the provisioned role from .env (PLATFORM_ROLE in this project).
+    """
     text = path.read_text(encoding="utf-8")
     statements = [s.strip() for s in text.split(";") if s.strip()]
     executed: list[str] = []
