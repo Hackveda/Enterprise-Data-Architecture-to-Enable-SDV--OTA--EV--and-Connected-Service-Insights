@@ -4,3 +4,10 @@ __pycache__/
 .pytest_cache/
 *.pyc
 data/source/
+.env
+.venv/
+__pycache__/
+*.pyc
+*.log
+data/generated/
+.streamlit/secrets.toml
